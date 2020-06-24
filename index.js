@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const Sequelize = require('sequelize');
 const { prefix, token } = require('./config.json');
-const uuidv4 = require("uuid/v4")
+const { v4: uuidv4 } = require('uuid');
 
 const client = new Discord.Client();
 const PREFIX = '!';
@@ -51,6 +51,7 @@ const Reputation = sequelize.define('reputation', {
 
 client.once('ready', () => {
     Reputation.sync();
+    console.log('Ready!');
 });
 
 client.on('message', async message => {
@@ -64,14 +65,18 @@ client.on('message', async message => {
                 return message.reply('you need to tag a user in order to give reputation!');
             }
 
-            const splitArgs = commandArgs.split(' ');
+            const splitArgs = commandArgs.split(' ').slice(1);
             const taggedUser = message.mentions.users.first();
             const tagDescription = splitArgs.join(' ');
 
-            if (!tagDescription.length) {
-                return message.reply('you need to provide a reason for adding reputation!');
+            if (tagDescription.length < 12) {
+                return message.reply('You need to provide a longer reason for adding reputation!');
             }
 
+            if (tagDescription.length > 80) {
+                return message.reply(`The reputation reason can not be longer than 80 characters. Your's was ${tagDescription.length} characters!`);
+            }
+            var reputation_id = uuidv4()
             try {
                 // equivalent to: INSERT INTO tags (name, description, username) values (?, ?, ?);
                 const reputation = await Reputation.create({
@@ -80,7 +85,7 @@ client.on('message', async message => {
                     user_name: taggedUser.tag,
                     rep_given_by: message.author.tag,
                     description: tagDescription,
-                    rep_id: uuidv4()
+                    rep_id: reputation_id
                 });
                 // check here if a user can rank up
                 return message.reply(`Rep added to ${taggedUser.tag} successfully.`);
@@ -92,8 +97,11 @@ client.on('message', async message => {
                 return message.reply('Something went wrong with adding reputation.');
             }
 
-        } else if (command === 'tag') {
-            const tagName = commandArgs;
+        } else if (command === 'rep') {
+            if (!message.mentions.users.size) {
+                return message.reply('you need to tag a user in order to give reputation!');
+            }
+            const taggedUser = message.mentions.users.first();
 
             // equivalent to: SELECT * FROM tags WHERE name = 'tagName' LIMIT 1;
             const tag = await Tags.findOne({ where: { name: tagName } });
