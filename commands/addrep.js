@@ -6,6 +6,8 @@ module.exports = {
     guildOnly: true,
     async execute(message, args) {
         const { v4: uuidv4 } = require('uuid');
+        const { Reputation } = require('../dbObjects');
+
         if (!message.mentions.users.size) {
             return message.reply('you need to tag a user in order to give reputation!');
         }
@@ -21,26 +23,25 @@ module.exports = {
             return message.reply(`The reputation reason can not be longer than 80 characters. Your's was ${tagDescription.length} characters!`);
         }
 
-        var reputation_id = uuidv4()
+        var reputation_id = uuidv4().substr(0, 8);
 
-        //try {
-            // equivalent to: INSERT INTO tags (name, description, username) values (?, ?, ?);
-        const reputation = await Reputation.create({
-            guild_id: message.guild.id,
-            user_id: taggedUser.id,
-            user_name: taggedUser.tag,
-            rep_given_by: message.author.tag,
-            description: repDescription,
-            rep_id: reputation_id
-        });
-        // check here if a user can rank up
-        return message.reply(`Rep added to ${taggedUser.tag} successfully.`);
-       // }
-        // catch (e) {
-        //     if (e.name === 'SequelizeUniqueConstraintError') {
-        //         return message.reply('That rep UUID already exists.');
-        //     }
-        //     return message.reply('Something went wrong with adding reputation.');
-        // }
+        try {
+            const reputation = await Reputation.create({
+                rep_id: reputation_id,
+                guild_id: message.guild.id,
+                user_id: taggedUser.id,
+                user_name: taggedUser.tag,
+                rep_given_by: message.author.tag,
+                rep_given_by_id: message.author.id,
+                description: repDescription
+            });
+            return message.reply(`Rep added to ${taggedUser.tag} successfully.`);
+       }
+       catch (e) {
+            if (e.name === 'SequelizeUniqueConstraintError') {
+                return message.reply('That rep UUID already exists.');
+            }
+            return message.reply('Something went wrong with adding reputation.');
+        }
     },
 };

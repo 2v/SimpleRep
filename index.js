@@ -14,51 +14,7 @@ for (const file of commandFiles) {
     client.commands.set(command.name, command);
 }
 
-const sequelize = new Sequelize('database', 'user', 'password', {
-    host: 'localhost',
-    dialect: 'sqlite',
-    logging: false,
-    storage: 'database.sqlite',
-})
-
-/*
- equivalent to: CREATE TABLE tags (
- name VARCHAR(255),
- description TEXT,
- username VARCHAR(255),
- usage INT
- );
- */
-const Reputation = sequelize.define('reputation', {
-    guild_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false
-    },
-    user_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false
-    },
-    user_name: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    rep_given_by: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    description: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    rep_id: {
-        type: Sequelize.STRING,
-        unique: true,
-        allowNull: false
-    },
-})
-
 client.once('ready', () => {
-    Reputation.sync();
     console.log('Ready!');
 });
 

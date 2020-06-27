@@ -1,28 +1,33 @@
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define('reputation', {
+        rep_id: {
+            type: DataTypes.STRING,
+            unique: true,
+            allowNull: false,
+            primaryKey: true
+        },
         guild_id: {
-            type: Sequelize.INTEGER,
+            type: DataTypes.INTEGER,
             allowNull: false
         },
         user_id: {
-            type: Sequelize.INTEGER,
+            type: DataTypes.INTEGER,
             allowNull: false
         },
         user_name: {
-            type: Sequelize.STRING,
+            type: DataTypes.STRING,
             allowNull: false
         },
         rep_given_by: {
-            type: Sequelize.STRING,
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        rep_given_by_id: {
+            type: DataTypes.INTEGER,
             allowNull: false
         },
         description: {
-            type: Sequelize.STRING,
-            allowNull: false
-        },
-        rep_id: {
-            type: Sequelize.STRING,
-            unique: true,
+            type: DataTypes.STRING,
             allowNull: false
         },
     })
