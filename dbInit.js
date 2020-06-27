@@ -13,7 +13,7 @@ const force = process.argv.includes('--force') || process.argv.includes('-f');
 
 sequelize.sync({ force }).then(async () => {
     const shop = [
-        Reputation.upsert({ rep_id:0, guild_id:0, user_id:0, user_name:"test", rep_given_by: "test", rep_given_by_id: "0", description: "test" }),
+        Reputation.upsert({ rep_id:0, guild_id:0, user_id:0, user_name:"test", rep_given_by: "test", rep_given_by_id: "0", rep_positive: true, description: "test" }),
     ];
     await Promise.all(shop);
     console.log('Database synced');

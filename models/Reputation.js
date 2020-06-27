@@ -26,6 +26,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false
         },
+        rep_positive: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false
+        },
         description: {
             type: DataTypes.STRING,
             allowNull: false

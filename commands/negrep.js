@@ -1,8 +1,8 @@
 module.exports = {
-    name: 'addrep',
+    name: 'negrep',
     args: true,
     usage: '<user> <description>',
-    description: 'Give a reputation to the tagged user with a reason',
+    description: 'Give a negative reputation to a user with a reason',
     guildOnly: true,
     async execute(message, args) {
         const { v4: uuidv4 } = require('uuid');
@@ -16,11 +16,11 @@ module.exports = {
         const repDescription = args.slice(1).join(' ');
 
         if (taggedUser === message.author) {
-            return message.reply('You can not give reputation to yourself!');
+            return message.reply('You can not give reputation to yourself! (Also why would you want to give yourself negative rep huh?)');
         }
 
         if (taggedUser.bot) {
-            return message.reply('You can not give reputation to a bot! (even if they are a very kind bot D:)');
+            return message.reply('You can not give reputation to a bot! (even if they are a very noddy bot, sorry)');
         }
 
         if (repDescription.length < 12) {
@@ -41,12 +41,12 @@ module.exports = {
                 user_name: taggedUser.tag,
                 rep_given_by: message.author.tag,
                 rep_given_by_id: message.author.id,
-                rep_positive: true,
+                rep_positive: false,
                 description: repDescription
             });
-            return message.reply(`Rep added to ${taggedUser.tag} successfully.`);
-       }
-       catch (e) {
+            return message.reply(`Negative rep added to ${taggedUser.tag} successfully.`);
+        }
+        catch (e) {
             if (e.name === 'SequelizeUniqueConstraintError') {
                 return message.reply('That rep UUID already exists.');
             }
