@@ -54,7 +54,7 @@ module.exports = {
                     if (j === (guildData.length)) {
                         break;
                     }
-                    line = line.concat(guildData[j].rep_given_by, ': ', guildData[j].description, ' (', guildData[j].rep_id, ')\n')
+                    line = line.concat(guildData[j].rep_given_by, ': ', guildData[j].description, ' [', guildData[j].rep_id, ']\n')
                 }
 
                 pages.push(line);

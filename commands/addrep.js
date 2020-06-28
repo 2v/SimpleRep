@@ -35,7 +35,7 @@ module.exports = {
         }
 
         if (repDescription.length > 80) {
-            return message.reply(`The reputation reason cannot be longer than 80 characters. Your's was ${tagDescription.length} characters!`);
+            return message.reply(`The reputation reason cannot be longer than 80 characters. Your's was ${repDescription.length} characters!`);
         }
 
         var reputation_id = uuidv4().substr(0, 8);

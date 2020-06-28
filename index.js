@@ -21,6 +21,8 @@ client.once('ready', () => {
 client.on('message', async message => {
     if (!message.content.startsWith(prefix) || message.author.bot) return;
 
+    const role = message.guild.roles.cache.find(role => role.name === '<role name>');
+
     const args = message.content.slice(prefix.length).split(/ +/);
     const commandName = args.shift().toLowerCase();
 
