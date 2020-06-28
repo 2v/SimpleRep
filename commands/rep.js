@@ -1,9 +1,8 @@
 module.exports = {
     name: 'addrep',
-    aliases: ['plusrep'],
     args: true,
-    usage: '<user> <description>',
-    description: 'Give a reputation to the tagged user with a reason',
+    usage: '<user>',
+    description: 'Display the accumulated rep of a user',
     guildOnly: true,
     async execute(message, args) {
         const { v4: uuidv4 } = require('uuid');
@@ -46,8 +45,8 @@ module.exports = {
                 description: repDescription
             });
             return message.reply(`Rep added to ${taggedUser.tag} successfully.`);
-       }
-       catch (e) {
+        }
+        catch (e) {
             if (e.name === 'SequelizeUniqueConstraintError') {
                 return message.reply('That rep UUID already exists.');
             }
