@@ -1,5 +1,6 @@
 module.exports = {
     name: 'purgerep',
+    aliases: ['removerep', 'remrep'],
     args: true,
     usage: '<id>',
     description: 'Remove permanently a specific reputation of a user in the guild. Only administrators have access to this command',

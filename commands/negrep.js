@@ -1,6 +1,6 @@
 module.exports = {
     name: 'negrep',
-    aliases: ['minusrep', 'minrep', 'removerep', 'remrep', '-rep', '--rep', '-r'],
+    aliases: ['minusrep', 'minrep', '-rep', '--rep', '-r'],
     args: true,
     usage: '<user> <description>',
     description: 'Give a negative reputation to a user with a reason',
