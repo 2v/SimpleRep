@@ -17,11 +17,11 @@ module.exports = {
         const repDescription = args.slice(1).join(' ');
 
         if (taggedUser === message.author) {
-            return message.reply('You can not give reputation to yourself! (Also why would you want to give yourself negative rep huh?)');
+            return message.reply('You cannot give reputation to yourself! (Also why would you want to give yourself negative rep huh?)');
         }
 
         if (taggedUser.bot) {
-            return message.reply('You can not give reputation to a bot! (even if they are a very noddy bot, sorry)');
+            return message.reply('You cannot give reputation to a bot! (even if they are a very noddy bot, sorry)');
         }
 
         if (repDescription.length < 12) {
@@ -29,7 +29,7 @@ module.exports = {
         }
 
         if (repDescription.length > 80) {
-            return message.reply(`The reputation reason can not be longer than 80 characters. Your's was ${tagDescription.length} characters!`);
+            return message.reply(`The reputation reason cannot be longer than 80 characters. Your's was ${tagDescription.length} characters!`);
         }
 
         var reputation_id = uuidv4().substr(0, 8);
