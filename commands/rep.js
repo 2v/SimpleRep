@@ -1,12 +1,13 @@
 module.exports = {
-    name: 'addrep',
+    name: 'rep',
     args: true,
     usage: '<user>',
     description: 'Display the accumulated rep of a user',
     guildOnly: true,
-    execute(message, args) {
+    async execute(message, args) {
         const Discord = require('discord.js');
         const { Reputation } = require('../dbObjects');
+        const { Op } = require("sequelize");
 
         if (!message.mentions.users.size) {
             return message.reply('you need to tag a user in order to view their reputation!');
@@ -18,26 +19,58 @@ module.exports = {
             return message.reply('You cannot check the reputation of a bot!');
         }
 
-        // inline field max width is 74
-        let pages = ['tb#0001: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx (cc90ee5e)\n' +
-        'tb#0001: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx (cc90ee5e)\n' +
-        'tb#0001: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx (cc90ee5e)\n' +
-        'tb#0001: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx (cc90ee5e)\n' +
-        'tb#0001: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx (cc90ee5e)\n' +
-        'tb#0001: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx (cc90ee5e)\n' +
-        'tb#0001: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx (cc90ee5e)\n' +
-        'tb#0001: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx (cc90ee5e)\n' +
-        'tb#0001: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx (cc90ee5e)\n' +
-        'tb#0001: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx (cc90ee5e)\n' +
-        'tb#0001: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx (cc90ee5e)\n' +
-        'tb#0001: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx (cc90ee5e)\n' +
-        'tb#0001: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx (cc90ee5e)\n' +
-        'tb#0001: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx (cc90ee5e)\n' +
-        'tb#0001: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx (cc90ee5e)\n' +
-        'tb#0001: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx (cc90ee5e)', 'Page two!', 'Page three!', 'Page four'];
+        let guild = message.guild;
+
+        if (!guild.member(taggedUser)) {
+            return message.reply('The user must be in the guild to check their reputation!');
+        }
+
+        var pages = [];
+
+        // SELECT * FROM post WHERE guild_id = message.guild.id AND user_id = message.author.id;
+        await Reputation.findAll({
+            attributes: [
+                'rep_given_by',
+                'description',
+                'rep_id'
+            ],
+            where: {
+                [Op.and]: [
+                    { guild_id: guild.id },
+                    { user_id: taggedUser.id }
+                ]
+            }
+        }).then(guildData => {
+            if (!guildData.length) {
+                return pages.push('This user has no reputation');
+            }
+
+            let numIterations = guildData.length / 10;
+
+            for(let i = 0; i < numIterations; ++i) {
+                //console.log('loop started');
+                let line = "";
+                for(let j = (i)*10; j < (i+1)*10; ++j) {
+                    if (j === (guildData.length)) {
+                        break;
+                    }
+                    line = line.concat(guildData[j].rep_given_by, ': ', guildData[j].description, ' (', guildData[j].rep_id, ')\n')
+                }
+
+                pages.push(line);
+
+            }
+            // fulfillment
+        }, reason => {
+            return message.reply('There was a problem querying the reputation database, please try again later.');
+            // rejection
+        });
+
         let page = 1;
 
         const embed = new Discord.MessageEmbed()
+            .setTitle(taggedUser.tag + '\'s Reputation')
+            .setThumbnail(taggedUser.displayAvatarURL({ format: "png", dynamic: true }))
             .setColor(0xffffff)
             .setFooter(`Page ${page} of ${pages.length}`)
             .setDescription(pages[page-1])

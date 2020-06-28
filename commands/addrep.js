@@ -24,6 +24,12 @@ module.exports = {
             return message.reply('You cannot give reputation to a bot! (even if they are a very kind bot D:)');
         }
 
+        let guild = message.guild;
+
+        if (!guild.member(taggedUser)) {
+            return message.reply('The user must be in the guild to check their reputation!');
+        }
+
         if (repDescription.length < 12) {
             return message.reply('You need to provide a longer reason for adding reputation!');
         }
