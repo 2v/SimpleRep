@@ -1,11 +1,11 @@
+const { RepThresholdSettings } = require('../dbObjects');
+const Discord = require('discord.js');
+
 module.exports = {
     name: 'repinfo',
     description: 'Check the role names and rep thresholds associated with each',
     guildOnly: true,
     async execute(message, args) {
-        const { RepThresholdSettings } = require('../dbObjects');
-        const Discord = require('discord.js');
-
         const trader_setting = await RepThresholdSettings.findOne({ where: { guild_id: message.guild.id } });
 
         if (trader_setting) {

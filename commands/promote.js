@@ -1,3 +1,7 @@
+const { RepThresholdSettings } = require('../dbObjects');
+const { Reputation } = require('../dbObjects');
+const { Op } = require("sequelize");
+
 module.exports = {
     name: 'promote',
     args: true,
@@ -5,10 +9,6 @@ module.exports = {
     description: 'Use this command to level up to a certain role. Note, you can only change roles if you meet the rep requirement of each specific server. You can check this with the \`!repinfo\` command.',
     guildOnly: true,
     async execute(message, args) {
-        const { RepThresholdSettings } = require('../dbObjects');
-        const { Reputation } = require('../dbObjects');
-        const { Op } = require("sequelize");
-
         let requested_role = args[0].toLowerCase();
 
         if (requested_role !== 'trader' && requested_role !== 'reputable' && requested_role !== 'trusted') {

@@ -1,3 +1,6 @@
+const { Reputation } = require('../dbObjects');
+const { Op } = require("sequelize");
+
 module.exports = {
     name: 'purgerep',
     aliases: ['removerep', 'remrep'],
@@ -7,9 +10,6 @@ module.exports = {
     description: 'Remove permanently a specific reputation of a user in the guild. Only administrators have access to this command',
     guildOnly: true,
     async execute(message, args) {
-        const { Reputation } = require('../dbObjects');
-        const { Op } = require("sequelize");
-
         await Reputation.findAll({
             attributes: [
                 'rep_id',

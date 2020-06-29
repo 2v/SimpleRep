@@ -1,3 +1,5 @@
+const { RepThresholdSettings } = require('../dbObjects');
+
 module.exports = {
     name: 'setrep',
     aliases: ['repset', 'configurerep', 'config'],
@@ -7,8 +9,6 @@ module.exports = {
     description: 'Set the required reputation to gain either the trader, reputable, or trusted role. If these are not set, default values will be used.',
     guildOnly: true,
     async execute(message, args) {
-        const { RepThresholdSettings } = require('../dbObjects');
-
         let requested_role = args[0].toLowerCase();
 
         if (requested_role !== 'trader' && requested_role !== 'reputable' && requested_role !== 'trusted') {

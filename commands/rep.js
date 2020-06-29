@@ -1,3 +1,7 @@
+const Discord = require('discord.js');
+const { Reputation } = require('../dbObjects');
+const { Op } = require("sequelize");
+
 module.exports = {
     name: 'rep',
     args: true,
@@ -5,10 +9,6 @@ module.exports = {
     description: 'Display the accumulated rep of a user',
     guildOnly: true,
     async execute(message, args) {
-        const Discord = require('discord.js');
-        const { Reputation } = require('../dbObjects');
-        const { Op } = require("sequelize");
-
         if (!message.mentions.users.size) {
             return message.reply('you need to tag a user in order to view their reputation!');
         }

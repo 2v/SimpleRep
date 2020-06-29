@@ -1,3 +1,6 @@
+const { v4: uuidv4 } = require('uuid');
+const { Reputation } = require('../dbObjects');
+
 module.exports = {
     name: 'negrep',
     aliases: ['minusrep', 'minrep', '-rep', '--rep', '-r'],
@@ -6,9 +9,6 @@ module.exports = {
     description: 'Give a negative reputation to a user with a reason',
     guildOnly: true,
     async execute(message, args) {
-        const { v4: uuidv4 } = require('uuid');
-        const { Reputation } = require('../dbObjects');
-
         if (!message.mentions.users.size) {
             return message.reply('you need to tag a user in order to give reputation!');
         }
