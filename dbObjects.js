@@ -8,5 +8,6 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 });
 
 const Reputation = sequelize.import('models/Reputation');
+const RepThresholdSettings = sequelize.import('models/RepThresholdSettings');
 
-module.exports = { Reputation };
+module.exports = { Reputation, RepThresholdSettings };
