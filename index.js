@@ -21,43 +21,45 @@ client.once('ready', () => {
 client.on('message', async message => {
     if (!message.content.startsWith(prefix) || message.author.bot) return;
 
-    const trader_role = message.guild.roles.cache.find(role => role.name === 'Trader');
-    const reputatable_role = message.guild.roles.cache.find(role => role.name === 'Reputable');
-    const trusted_role = message.guild.roles.cache.find(role => role.name === 'Trusted');
+    if (!(message.channel.type === "dm")) {
+        const trader_role = message.guild.roles.cache.find(role => role.name === 'Trader');
+        const reputatable_role = message.guild.roles.cache.find(role => role.name === 'Reputable');
+        const trusted_role = message.guild.roles.cache.find(role => role.name === 'Trusted');
 
-    if (!trader_role || !reputatable_role || !trusted_role) {
-        if (!trader_role) {
-            message.guild.roles.create({
-                data: {
-                    name: 'Trader',
-                    color: 'PURPLE',
-                },
-                reason: 'Created missing \'Trader\' role',
-            })
-                .then(console.log)
-                .catch(console.error);
-        }
-        if (!reputatable_role) {
-            message.guild.roles.create({
-                data: {
-                    name: 'Reputable',
-                    color: 'BLUE',
-                },
-                reason: 'Created missing \'Reputable\' role',
-            })
-                .then(console.log)
-                .catch(console.error);
-        }
-        if (!trusted_role) {
-            message.guild.roles.create({
-                data: {
-                    name: 'Trusted',
-                    color: 'GREEN',
-                },
-                reason: 'Created missing \'Trusted\' role',
-            })
-                .then(console.log)
-                .catch(console.error);
+        if (!trader_role || !reputatable_role || !trusted_role) {
+            if (!trader_role) {
+                message.guild.roles.create({
+                    data: {
+                        name: 'Trader',
+                        color: 'PURPLE',
+                    },
+                    reason: 'Created missing \'Trader\' role',
+                })
+                    .then(console.log)
+                    .catch(console.error);
+            }
+            if (!reputatable_role) {
+                message.guild.roles.create({
+                    data: {
+                        name: 'Reputable',
+                        color: 'BLUE',
+                    },
+                    reason: 'Created missing \'Reputable\' role',
+                })
+                    .then(console.log)
+                    .catch(console.error);
+            }
+            if (!trusted_role) {
+                message.guild.roles.create({
+                    data: {
+                        name: 'Trusted',
+                        color: 'GREEN',
+                    },
+                    reason: 'Created missing \'Trusted\' role',
+                })
+                    .then(console.log)
+                    .catch(console.error);
+            }
         }
     }
 
