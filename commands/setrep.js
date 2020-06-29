@@ -47,7 +47,7 @@ module.exports = {
         const trader_setting = await RepThresholdSettings.findOne({ where: { guild_id: 0 } });
         let default_trader_setting, default_reputable_threshold, default_trusted_threshold;
         if (trader_setting) {
-            console.log(trader_setting.trader_threshold);
+
             default_trader_setting = trader_setting.trader_threshold;
             default_reputable_threshold = trader_setting.reputable_threshold;
             default_trusted_threshold = trader_setting.trusted_threshold;
