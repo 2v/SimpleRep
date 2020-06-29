@@ -69,6 +69,12 @@ client.on('message', async message => {
 
     if (!command) return;
 
+    if (command.admin) {
+        if(!message.member.permissions.has('ADMINISTRATOR', true)) {
+            return message.reply('You do not have permission to use this command.')
+        }
+    }
+
     if (command.args && !args.length) {
         let reply = `You didn't provide any arguments, ${message.author}!`;
 

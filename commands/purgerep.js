@@ -1,6 +1,7 @@
 module.exports = {
     name: 'purgerep',
     aliases: ['removerep', 'remrep'],
+    admin: true,
     args: true,
     usage: '<id>',
     description: 'Remove permanently a specific reputation of a user in the guild. Only administrators have access to this command',
@@ -8,12 +9,6 @@ module.exports = {
     async execute(message, args) {
         const { Reputation } = require('../dbObjects');
         const { Op } = require("sequelize");
-
-        console.log(args[0]);
-        console.log(message.member.permissions.has('ADMINISTRATOR', true));
-        if(!message.member.permissions.has('ADMINISTRATOR', true)) {
-            return message.reply('Could not remove reputation from this user because you do not have permission to do so.')
-        }
 
         await Reputation.findAll({
             attributes: [
@@ -28,6 +23,9 @@ module.exports = {
                 ]
             }
         }).then(guildData => {
+            if (!guildData[0]) {
+                return message.reply(`Could not find any rep with id: ${args[0]}`);
+            }
             message.channel.send(`Deleting rep given to \`${guildData[0].user_name}\` with ID: \`${guildData[0].rep_id}\`...`);
             Reputation.destroy({
                 where: {
