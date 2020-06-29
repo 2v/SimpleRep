@@ -4,7 +4,6 @@ module.exports = {
     guildOnly: true,
     async execute(message, args) {
         const { RepThresholdSettings } = require('../dbObjects');
-        const { Op } = require("sequelize");
         const Discord = require('discord.js');
 
         const trader_setting = await RepThresholdSettings.findOne({ where: { guild_id: message.guild.id } });

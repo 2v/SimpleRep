@@ -8,7 +8,6 @@ module.exports = {
     guildOnly: true,
     async execute(message, args) {
         const { RepThresholdSettings } = require('../dbObjects');
-        const { Op } = require("sequelize");
 
         let requested_role = args[0].toLowerCase();
 
