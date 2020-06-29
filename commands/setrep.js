@@ -1,6 +1,6 @@
 module.exports = {
     name: 'setrep',
-    aliases: ['setrep'],
+    aliases: ['repset', 'configurerep', 'config'],
     args: true,
     admin: true,
     usage: '<role> <rep_threshold>',

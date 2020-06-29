@@ -21,9 +21,6 @@ module.exports = {
                 )
 
             return message.channel.send(exampleEmbed);
-            // default_trader_setting = trader_setting.trader_threshold;
-            // default_reputable_threshold = trader_setting.reputable_threshold;
-            // default_trusted_threshold = trader_setting.trusted_threshold;
         }
 
         return message.channel.send('Failed to access database');
