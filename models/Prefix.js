@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false
         },
         prefix: {
-            type: DataTypes.CHAR,
+            type: DataTypes.STRING,
             allowNull: false
         },
     }, {

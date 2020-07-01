@@ -1,7 +1,8 @@
 const fs = require('fs');
+const { Prefix } = require('./dbObjects.js');
 const Discord = require('discord.js');
 const Sequelize = require('sequelize');
-const { prefix, token } = require('./config.json');
+const { token } = require('./config.json');
 const { v4: uuidv4 } = require('uuid');
 
 const client = new Discord.Client();
@@ -21,7 +22,18 @@ client.once('ready', () => {
 });
 
 client.on('message', async message => {
+    let prefix_data = await Prefix.findOne({ where: { guild_id: message.guild.id } });
+    let prefix = prefix_data.prefix;
+    //console.log(message.guild.id);
+    //console.log(prefix_data.prefix);
+    if (!prefix) {
+        prefix = '!';
+    }
+
     if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+    console.log(prefix);
+
     let trader_role, reputable_role, trusted_role;
     if (!(message.channel.type === "dm")) {
         trader_role = message.guild.roles.cache.find(role => role.name === 'Trader');
@@ -103,14 +115,12 @@ client.on('message', async message => {
     } else if (message.member.roles.cache.has(reputable_role.id) && command.reputable_cooldown > 0) {
         cooldownAmount = command.reputable_cooldown  * 1000;
     } else if (message.member.roles.cache.has(trader_role.id) && command.trader_cooldown > 0) {
-        console.log("true");
         cooldownAmount = command.trader_cooldown  * 1000;
     } else {
         cooldownAmount = (command.cooldown || 3) * 1000;
     }
 
     if(message.member.permissions.has('ADMINISTRATOR', true)) {
-        console.log("true");
         cooldownAmount = (command.admin_cooldown || 3) * 1000;
     }
 
