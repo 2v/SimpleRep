@@ -3,6 +3,11 @@ const { Reputation } = require('../dbObjects');
 
 module.exports = {
     name: 'addrep',
+    cooldown: 86400,
+    admin_cooldown: 3,
+    trader_cooldown: 36000,
+    reputable_cooldown: 14400,
+    trusted_cooldown: 600,
     aliases: ['plusrep'],
     args: true,
     usage: '<user> <description>',

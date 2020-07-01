@@ -14,19 +14,21 @@ for (const file of commandFiles) {
     client.commands.set(command.name, command);
 }
 
+const cooldowns = new Discord.Collection();
+
 client.once('ready', () => {
     console.log('Ready!');
 });
 
 client.on('message', async message => {
     if (!message.content.startsWith(prefix) || message.author.bot) return;
-
+    let trader_role, reputable_role, trusted_role;
     if (!(message.channel.type === "dm")) {
-        const trader_role = message.guild.roles.cache.find(role => role.name === 'Trader');
-        const reputatable_role = message.guild.roles.cache.find(role => role.name === 'Reputable');
-        const trusted_role = message.guild.roles.cache.find(role => role.name === 'Trusted');
+        trader_role = message.guild.roles.cache.find(role => role.name === 'Trader');
+        reputable_role = message.guild.roles.cache.find(role => role.name === 'Reputable');
+        trusted_role = message.guild.roles.cache.find(role => role.name === 'Trusted');
 
-        if (!trader_role || !reputatable_role || !trusted_role) {
+        if (!trader_role || !reputable_role || !trusted_role) {
             if (!trader_role) {
                 message.guild.roles.create({
                     data: {
@@ -38,7 +40,7 @@ client.on('message', async message => {
                     .then(console.log)
                     .catch(console.error);
             }
-            if (!reputatable_role) {
+            if (!reputable_role) {
                 message.guild.roles.create({
                     data: {
                         name: 'Reputable',
@@ -86,6 +88,49 @@ client.on('message', async message => {
 
         return message.channel.send(reply);
     }
+
+    if (!cooldowns.has(command.name)) {
+        cooldowns.set(command.name, new Discord.Collection());
+    }
+
+    const now = Date.now();
+    const timestamps = cooldowns.get(command.name);
+
+    let cooldownAmount;
+
+    if (message.member.roles.cache.has(trusted_role.id) && command.trusted_cooldown > 0) {
+        cooldownAmount = command.trusted_cooldown  * 1000;
+    } else if (message.member.roles.cache.has(reputable_role.id) && command.reputable_cooldown > 0) {
+        cooldownAmount = command.reputable_cooldown  * 1000;
+    } else if (message.member.roles.cache.has(trader_role.id) && command.trader_cooldown > 0) {
+        console.log("true");
+        cooldownAmount = command.trader_cooldown  * 1000;
+    } else {
+        cooldownAmount = (command.cooldown || 3) * 1000;
+    }
+
+    if(message.member.permissions.has('ADMINISTRATOR', true)) {
+        console.log("true");
+        cooldownAmount = (command.admin_cooldown || 3) * 1000;
+    }
+
+    if (timestamps.has(message.author.id)) {
+        const expirationTime = timestamps.get(message.author.id) +  cooldownAmount;
+
+        if (now < expirationTime) {
+            const timeLeft = (expirationTime - now) / 1000;
+            if (timeLeft > 3600) {
+                return message.reply(`please wait ${(timeLeft/3600).toFixed(1)} more hour(s) before using the \`${command.name}\` command.`);
+            } else if (timeLeft > 60) {
+                return message.reply(`please wait ${(timeLeft/60).toFixed(1)} more minute(s) before using the \`${command.name}\` command.`);
+            } else {
+                return message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before using the \`${command.name}\` command.`);
+            }
+        }
+    }
+
+    timestamps.set(message.author.id, now);
+    setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 
     try {
         command.execute(message, args);

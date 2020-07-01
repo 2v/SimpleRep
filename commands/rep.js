@@ -4,6 +4,8 @@ const { Op } = require("sequelize");
 
 module.exports = {
     name: 'rep',
+    cooldown: 10,
+    admin_cooldown: 3,
     args: true,
     usage: '<user>',
     description: 'Display the accumulated rep of a user',

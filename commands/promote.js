@@ -4,6 +4,7 @@ const { Op } = require("sequelize");
 
 module.exports = {
     name: 'promote',
+    cooldown: 600,
     args: true,
     usage: '<role>',
     description: 'Use this command to level up to a certain role. Note, you can only change roles if you meet the rep requirement of each specific server. You can check this with the \`!repinfo\` command.',
