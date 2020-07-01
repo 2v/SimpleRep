@@ -22,12 +22,15 @@ client.once('ready', () => {
 });
 
 client.on('message', async message => {
+    let prefix;
+
     let prefix_data = await Prefix.findOne({ where: { guild_id: message.guild.id } });
-    let prefix = prefix_data.prefix;
     //console.log(message.guild.id);
     //console.log(prefix_data.prefix);
-    if (!prefix) {
+    if (!prefix_data) {
         prefix = '!';
+    } else {
+        prefix = prefix_data.prefix;
     }
 
     if (!message.content.startsWith(prefix) || message.author.bot) return;

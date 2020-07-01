@@ -14,6 +14,22 @@ module.exports = {
             return message.reply(`\`${ formatted_prefix }\` cannot be used as a prefix.`);
         }
 
+        let allowed = true;
+
+        let code, i, len;
+        for (i = 0, len = formatted_prefix.length; i < len; i++) {
+            code = formatted_prefix.charCodeAt(i);
+            if (!(code > 32 && code < 48) &&
+                !(code > 57 && code < 91) &&
+                !(code > 96 && code < 123)) {
+                allowed = false;
+            }
+        }
+
+        if(!allowed) {
+            return message.reply(`\`${ formatted_prefix }\` cannot be used as a prefix.`);
+        }
+
         const prefix_entry = await Prefix.findOne({ where: { guild_id: message.guild.id } });
 
         if(prefix_entry) {
