@@ -4,6 +4,7 @@ const { Op } = require("sequelize");
 module.exports = {
     name: 'repcount',
     aliases: ['countrep', 'totalrep', 'sumrep'],
+    cooldown: 10,
     args: true,
     usage: '<user>',
     description: 'Count net total reputation of a user. Calculated by taking the total positive reputation and subtracting all negative reputation',
