@@ -38,23 +38,35 @@ module.exports = {
 
         const totalRep = positive_rep_count - negative_rep_count;
 
+        let trader_threshold, reputable_threshold, trusted_threshold;
         const trader_setting = await RepThresholdSettings.findOne({ where: { guild_id: message.guild.id } });
 
-        if (requested_role === 'trader' && totalRep > trader_setting.trader_threshold) {
+        if (trader_setting) {
+            trader_threshold = trader_setting.trader_threshold;
+            reputable_threshold = trader_setting.reputable_threshold;
+            trusted_threshold = trader_setting.trusted_threshold;
+        } else {
+            const default_trader_setting = await RepThresholdSettings.findOne({ where: { guild_id: 0 } });
+            trader_threshold = default_trader_setting.trader_threshold;
+            reputable_threshold = default_trader_setting.reputable_threshold;
+            trusted_threshold = default_trader_setting.trusted_threshold;
+        }
+
+        if (requested_role === 'trader' && totalRep >= trader_threshold) {
             const role = message.guild.roles.cache.find(role => role.name === 'Trader');
             const member = message.member;
             await member.roles.add(role);
             return message.reply('You have successfully been promoted to role: Trader.');
         }
 
-        if (requested_role === 'reputable' && totalRep > trader_setting.reputable_threshold) {
+        if (requested_role === 'reputable' && totalRep >= reputable_threshold) {
             const role = message.guild.roles.cache.find(role => role.name === 'Reputable');
             const member = message.member;
             await member.roles.add(role);
             return message.reply('You have successfully been promoted to role: Reputable.');
         }
 
-        if (requested_role === 'trusted' && totalRep > trader_setting.trusted_threshold) {
+        if (requested_role === 'trusted' && totalRep >= trusted_threshold) {
             const role = message.guild.roles.cache.find(role => role.name === 'Trusted');
             const member = message.member;
             await member.roles.add(role);
