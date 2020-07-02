@@ -10,8 +10,8 @@ module.exports = {
     async execute(message, args) {
         let formatted_prefix = String(args[0]);
 
-        if (formatted_prefix.length > 3 || formatted_prefix.includes('\`')) {
-            return message.reply(`\`${ formatted_prefix }\` cannot be used as a prefix.`);
+        if (formatted_prefix.length > 2) {
+            return message.reply(`\`${ formatted_prefix }\` is too long to be a prefix.`);
         }
 
         let allowed = true;

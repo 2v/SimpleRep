@@ -22,20 +22,18 @@ client.once('ready', () => {
 });
 
 client.on('message', async message => {
-    let prefix;
+    if(message.author.bot) return;
 
+    let prefix;
     let prefix_data = await Prefix.findOne({ where: { guild_id: message.guild.id } });
-    //console.log(message.guild.id);
-    //console.log(prefix_data.prefix);
+
     if (!prefix_data) {
         prefix = '!';
     } else {
         prefix = prefix_data.prefix;
     }
 
-    if (!message.content.startsWith(prefix) || message.author.bot) return;
-
-    console.log(prefix);
+    if (!message.content.startsWith(prefix)) return;
 
     let trader_role, reputable_role, trusted_role;
     if (!(message.channel.type === "dm")) {

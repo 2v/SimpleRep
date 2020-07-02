@@ -1,5 +1,6 @@
 const { v4: uuidv4 } = require('uuid');
 const { Reputation } = require('../dbObjects');
+const { isAllowedString } = require('../util')
 
 module.exports = {
     name: 'addrep',
@@ -41,6 +42,10 @@ module.exports = {
 
         if (repDescription.length > 80) {
             return message.reply(`The reputation reason cannot be longer than 80 characters. Your's was ${repDescription.length} characters!`);
+        }
+
+        if(!isAllowedString(repDescription)) {
+            return message.reply(`Special characters are not allowed in reputation descriptions!`);
         }
 
         var reputation_id = uuidv4().substr(0, 8);

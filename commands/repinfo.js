@@ -9,7 +9,7 @@ module.exports = {
         const trader_setting = await RepThresholdSettings.findOne({ where: { guild_id: message.guild.id } });
 
         if (trader_setting) {
-            const exampleEmbed = new Discord.MessageEmbed()
+            const settings_embed = new Discord.MessageEmbed()
                 .setColor('#0099ff')
                 .setTitle(message.guild.name + '\'s Reputation Requirements:')
                 .setThumbnail(message.guild.iconURL({ format: "png", dynamic: true }))
@@ -19,9 +19,21 @@ module.exports = {
                     { name: 'Trusted Role', value: trader_setting.trusted_threshold },
                 )
 
-            return message.channel.send(exampleEmbed);
+            return message.channel.send(settings_embed);
         }
 
-        return message.channel.send('Failed to access database');
+        const trader_setting_default = await RepThresholdSettings.findOne({ where: { guild_id: 0 } });
+
+        const default_settings_embed = new Discord.MessageEmbed()
+            .setColor('#0099ff')
+            .setTitle(message.guild.name + '\'s Reputation Requirements:')
+            .setThumbnail(message.guild.iconURL({ format: "png", dynamic: true }))
+            .addFields(
+                { name: 'Trader Role', value: trader_setting_default.trader_threshold },
+                { name: 'Reputable Role', value: trader_setting_default.reputable_threshold },
+                { name: 'Trusted Role', value: trader_setting_default.trusted_threshold },
+            )
+
+        return message.channel.send(default_settings_embed);
     }
 }

@@ -4,6 +4,7 @@ const { Op } = require("sequelize");
 
 module.exports = {
     name: 'rep',
+    aliases: ['checkrep', 'userrep', 'repuser'],
     cooldown: 10,
     admin_cooldown: 3,
     args: true,
