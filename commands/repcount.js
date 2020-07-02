@@ -40,9 +40,11 @@ module.exports = {
         if(positive_rep_count || negative_rep_count) {
             const totalRep = positive_rep_count - negative_rep_count;
 
-            return message.channel.send(`${taggedUser.tag}\'s total rep is: \`${totalRep}\`. This user has \`${positive_rep_count}\` positive rep and \`${negative_rep_count}\` negative rep.`);
+            message.channel.send(`${taggedUser.tag}\'s total rep is: \`${totalRep}\`. This user has \`${positive_rep_count}\` positive rep and \`${negative_rep_count}\` negative rep.`);
+            return 200;
         }
 
-        return message.reply(`No reputation was found.`);
+        message.reply(`No reputation was found.`);
+        return 200;
     },
 };

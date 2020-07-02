@@ -68,7 +68,8 @@ module.exports = {
                 rep_positive: true,
                 description: repDescription
             });
-            return message.reply(`Rep added to ${taggedUser.tag} successfully.`);
+            message.reply(`Rep added to ${taggedUser.tag} successfully.`);
+            return 200;
        }
        catch (e) {
             if (e.name === 'SequelizeUniqueConstraintError') {

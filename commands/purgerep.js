@@ -24,7 +24,8 @@ module.exports = {
             }
         }).then(guildData => {
             if (!guildData[0]) {
-                return message.reply(`Could not find any rep with id: ${args[0]}`);
+                message.reply(`Could not find any rep with id: ${args[0]}`);
+                return 100;
             }
             message.channel.send(`Deleting rep given to \`${guildData[0].user_name}\` with ID: \`${guildData[0].rep_id}\`...`);
             Reputation.destroy({
@@ -33,13 +34,16 @@ module.exports = {
                 }
             })
                 .then(data => {
-                    return message.reply('Success!');
+                    message.reply('Success!');
+                    return 200;
                 }, reason => {
-                    return message.reply('There was a problem querying the reputation database, please try again later.');
+                    message.reply('There was a problem querying the reputation database, please try again later.');
+                    return 100;
                     // rejection
                 });
         }, reason => {
-            return message.reply('could not find the requested data, please ensure that the specified REP_ID is correct.');
+            message.reply('could not find the requested data, please ensure that the specified REP_ID is correct.');
+            return 100;
             // rejection
         });
     },

@@ -19,7 +19,8 @@ module.exports = {
                     { name: 'Trusted Role', value: trader_setting.trusted_threshold },
                 )
 
-            return message.channel.send(settings_embed);
+            await message.channel.send(settings_embed);
+            return 200;
         }
 
         const trader_setting_default = await RepThresholdSettings.findOne({ where: { guild_id: 0 } });
@@ -34,6 +35,7 @@ module.exports = {
                 { name: 'Trusted Role', value: trader_setting_default.trusted_threshold },
             )
 
-        return message.channel.send(default_settings_embed);
+        await message.channel.send(default_settings_embed);
+        return 200;
     }
 }

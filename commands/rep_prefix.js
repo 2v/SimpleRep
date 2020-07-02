@@ -11,7 +11,8 @@ module.exports = {
         let formatted_prefix = String(args[0]);
 
         if (formatted_prefix.length > 2) {
-            return message.reply(`\`${ formatted_prefix }\` is too long to be a prefix.`);
+            message.reply(`\`${ formatted_prefix }\` is too long to be a prefix.`);
+            return 100;
         }
 
         let allowed = true;
@@ -27,27 +28,32 @@ module.exports = {
         }
 
         if(!allowed) {
-            return message.reply(`\`${ formatted_prefix }\` cannot be used as a prefix.`);
+            message.reply(`\`${ formatted_prefix }\` cannot be used as a prefix.`);
+            return 100;
         }
 
         const prefix_entry = await Prefix.findOne({ where: { guild_id: message.guild.id } });
 
         if(prefix_entry) {
             await prefix_entry.update({ prefix: formatted_prefix });
-            return message.reply(`Sucessfully changed prefix to \`${ formatted_prefix }\``);
+            message.reply(`Sucessfully changed prefix to \`${ formatted_prefix }\``);
+            return 200;
         } else {
             try {
                 await Prefix.create({
                     guild_id: message.guild.id,
                     prefix: formatted_prefix
                 })
-                return message.reply(`Sucessfully changed prefix to \`${ formatted_prefix }\``);
+                message.reply(`Sucessfully changed prefix to \`${ formatted_prefix }\``);
+                return 200;
             }
             catch (e) {
                 if (e.name === 'SequelizeUniqueConstraintError') {
-                    return message.reply('Entry already exists.');
+                    message.reply('Entry already exists.');
+                    return 100;
                 }
-                return message.reply('Something went wrong with adding reputation.');
+                message.reply('Something went wrong with adding reputation.');
+                return 100;
             }
 
         }

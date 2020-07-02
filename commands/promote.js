@@ -57,23 +57,27 @@ module.exports = {
             const role = message.guild.roles.cache.find(role => role.name === 'Trader');
             const member = message.member;
             await member.roles.add(role);
-            return message.reply('You have successfully been promoted to role: Trader.');
+            message.reply('You have successfully been promoted to role: Trader.');
+            return 200;
         }
 
         if (requested_role === 'reputable' && totalRep >= reputable_threshold) {
             const role = message.guild.roles.cache.find(role => role.name === 'Reputable');
             const member = message.member;
             await member.roles.add(role);
-            return message.reply('You have successfully been promoted to role: Reputable.');
+            message.reply('You have successfully been promoted to role: Reputable.');
+            return 200;
         }
 
         if (requested_role === 'trusted' && totalRep >= trusted_threshold) {
             const role = message.guild.roles.cache.find(role => role.name === 'Trusted');
             const member = message.member;
             await member.roles.add(role);
-            return message.reply('You have successfully been promoted to role: Trusted.');
+            message.reply('You have successfully been promoted to role: Trusted.');
+            return 200;
         }
 
-        return message.reply(`You do not have enough rep to level up at this time. Your total rep is: \`${totalRep}\`. Please be sure to check the requirements by typing \`!repinfo\``);
+        message.reply(`You do not have enough rep to level up at this time. Your total rep is: \`${totalRep}\`. Please be sure to check the requirements by typing \`!repinfo\``);
+        return 200;
     },
 };

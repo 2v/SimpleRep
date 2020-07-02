@@ -37,13 +37,16 @@ module.exports = {
         if (setting) {
             if (requested_role === 'trader') {
                 await RepThresholdSettings.update({ trader_threshold: repThreshold }, { where: { guild_id: message.guild.id } });
-                return message.reply(`Trader updated to a threshold of: ${repThreshold}`);
+                message.reply(`Trader updated to a threshold of: ${repThreshold}`);
+                return 200;
             } else if (requested_role === 'reputable') {
                 await RepThresholdSettings.update({ reputable_threshold: repThreshold }, { where: { guild_id: message.guild.id } });
-                return message.reply(`Reputable updated to a threshold of: ${repThreshold}`);
+                message.reply(`Reputable updated to a threshold of: ${repThreshold}`);
+                return 200;
             } else {
                 await RepThresholdSettings.update({ trusted_threshold: repThreshold }, { where: { guild_id: message.guild.id } });
-                return message.reply(`Trusted updated to a threshold of: ${repThreshold}`);
+                message.reply(`Trusted updated to a threshold of: ${repThreshold}`);
+                return 200;
             }
         }
 
@@ -65,7 +68,8 @@ module.exports = {
                 reputable_threshold: default_reputable_threshold,
                 trusted_threshold: default_trusted_threshold,
             })
-            return message.reply(`Trader updated to a threshold of: ${repThreshold}`);
+            message.reply(`Trader updated to a threshold of: ${repThreshold}`);
+            return 200;
         } else if (requested_role === 'reputable') {
             await RepThresholdSettings.create({
                 guild_id: message.guild.id,
@@ -73,7 +77,8 @@ module.exports = {
                 reputable_threshold: repThreshold,
                 trusted_threshold: default_trusted_threshold,
             })
-            return message.reply(`Reputable updated to a threshold of: ${repThreshold}`);
+            message.reply(`Reputable updated to a threshold of: ${repThreshold}`);
+            return 200;
         } else {
             await RepThresholdSettings.create({
                 guild_id: message.guild.id,
@@ -81,7 +86,8 @@ module.exports = {
                 reputable_threshold: default_reputable_threshold,
                 trusted_threshold: repThreshold,
             })
-            return message.reply(`Trusted updated to a threshold of: ${repThreshold}`);
+            message.reply(`Trusted updated to a threshold of: ${repThreshold}`);
+            return 200;
         }
     },
 };
