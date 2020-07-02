@@ -24,13 +24,14 @@ client.once('ready', () => {
 client.on('message', async message => {
     if(message.author.bot) return;
 
-    let prefix;
-    let prefix_data = await Prefix.findOne({ where: { guild_id: message.guild.id } });
+    let prefix = '!';
 
-    if (!prefix_data) {
-        prefix = '!';
-    } else {
-        prefix = prefix_data.prefix;
+    if (!(message.channel.type === "dm")) {
+        let prefix_data = await Prefix.findOne({where: {guild_id: message.guild.id}});
+
+        if (prefix_data) {
+            prefix = prefix_data.prefix;
+        }
     }
 
     if (!message.content.startsWith(prefix)) return;
@@ -86,9 +87,13 @@ client.on('message', async message => {
 
     if (!command) return;
 
+    if (command.guildOnly && message.channel.type === "dm") {
+        return message.reply('You cannot use this command by direct messaging me. Please use it in a guild.');
+    }
+
     if (command.admin) {
         if(!message.member.permissions.has('ADMINISTRATOR', true)) {
-            return message.reply('You do not have permission to use this command.')
+            return message.reply('You do not have permission to use this command.');
         }
     }
 
@@ -109,20 +114,22 @@ client.on('message', async message => {
     const now = Date.now();
     const timestamps = cooldowns.get(command.name);
 
-    let cooldownAmount;
+    let cooldownAmount = 3000;
 
-    if (message.member.roles.cache.has(trusted_role.id) && command.trusted_cooldown > 0) {
-        cooldownAmount = command.trusted_cooldown  * 1000;
-    } else if (message.member.roles.cache.has(reputable_role.id) && command.reputable_cooldown > 0) {
-        cooldownAmount = command.reputable_cooldown  * 1000;
-    } else if (message.member.roles.cache.has(trader_role.id) && command.trader_cooldown > 0) {
-        cooldownAmount = command.trader_cooldown  * 1000;
-    } else {
-        cooldownAmount = (command.cooldown || 3) * 1000;
-    }
+    if (!(message.channel.type === "dm")) {
+        if (message.member.roles.cache.has(trusted_role.id) && command.trusted_cooldown > 0) {
+            cooldownAmount = command.trusted_cooldown * 1000;
+        } else if (message.member.roles.cache.has(reputable_role.id) && command.reputable_cooldown > 0) {
+            cooldownAmount = command.reputable_cooldown * 1000;
+        } else if (message.member.roles.cache.has(trader_role.id) && command.trader_cooldown > 0) {
+            cooldownAmount = command.trader_cooldown * 1000;
+        } else {
+            cooldownAmount = (command.cooldown || 3) * 1000;
+        }
 
-    if(message.member.permissions.has('ADMINISTRATOR', true)) {
-        cooldownAmount = (command.admin_cooldown || 3) * 1000;
+        if (message.member.permissions.has('ADMINISTRATOR', true)) {
+            cooldownAmount = (command.admin_cooldown || 3) * 1000;
+        }
     }
 
     if (timestamps.has(message.author.id)) {
