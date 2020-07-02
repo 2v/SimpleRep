@@ -12,21 +12,25 @@ module.exports = {
         let requested_role = args[0].toLowerCase();
 
         if (requested_role !== 'trader' && requested_role !== 'reputable' && requested_role !== 'trusted') {
-            return message.reply('You did not specify one of three options for roles: \"Trader,\" \"Reputable,\" and \"Trusted.\"');
+            message.reply('You did not specify one of three options for roles: \"Trader,\" \"Reputable,\" and \"Trusted.\"');
+            return 100;
         }
 
         const repThreshold = parseInt(args[1]);
 
         if(!(typeof repThreshold==='number' && (repThreshold%1)===0)) {
-            return message.reply('Please specify an integer value for a threshold.');
+            message.reply('Please specify an integer value for a threshold.');
+            return 100;
         }
 
         if (repThreshold < 0) {
-            return message.reply('You cannot use negative numbers for a threshold!');
+            message.reply('You cannot use negative numbers for a threshold!');
+            return 100;
         }
 
         if (repThreshold > 10000) {
-            return message.reply('You cannot use an integer value greater than 10,000 for a threshold!');
+            message.reply('You cannot use an integer value greater than 10,000 for a threshold!');
+            return 100;
         }
 
         const setting = await RepThresholdSettings.findOne({ where: { guild_id: message.guild.id } });
@@ -46,12 +50,12 @@ module.exports = {
         const trader_setting = await RepThresholdSettings.findOne({ where: { guild_id: 0 } });
         let default_trader_setting, default_reputable_threshold, default_trusted_threshold;
         if (trader_setting) {
-
             default_trader_setting = trader_setting.trader_threshold;
             default_reputable_threshold = trader_setting.reputable_threshold;
             default_trusted_threshold = trader_setting.trusted_threshold;
         } else {
-            return message.channel.send('Failed to access database');
+            message.channel.send('Failed to access database');
+            return 100;
         }
 
         if (requested_role === 'trader') {

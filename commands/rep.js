@@ -13,19 +13,22 @@ module.exports = {
     guildOnly: true,
     async execute(message, args) {
         if (!message.mentions.users.size) {
-            return message.reply('you need to tag a user in order to view their reputation!');
+            message.reply('you need to tag a user in order to view their reputation!');
+            return 100;
         }
 
         const taggedUser = message.mentions.users.first();
 
         if (taggedUser.bot) {
-            return message.reply('You cannot check the reputation of a bot!');
+            message.reply('You cannot check the reputation of a bot!');
+            return 100;
         }
 
         let guild = message.guild;
 
         if (!guild.member(taggedUser)) {
-            return message.reply('The user must be in the guild to check their reputation!');
+            message.reply('The user must be in the guild to check their reputation!');
+            return 100;
         }
 
         var pages = [];
@@ -65,7 +68,8 @@ module.exports = {
             }
             // fulfillment
         }, reason => {
-            return message.reply('There was a problem querying the reputation database, please try again later.');
+            message.reply('There was a problem querying the reputation database, please try again later.');
+            return 100;
             // rejection
         });
 

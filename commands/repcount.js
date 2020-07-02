@@ -11,7 +11,8 @@ module.exports = {
     guildOnly: true,
     async execute(message, args) {
         if (!message.mentions.users.size) {
-            return message.reply('you need to tag a user to count their rep!');
+            message.reply('you need to tag a user to count their rep!');
+            return 100;
         }
 
         const taggedUser = message.mentions.users.first();

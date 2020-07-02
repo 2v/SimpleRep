@@ -13,7 +13,8 @@ module.exports = {
         let requested_role = args[0].toLowerCase();
 
         if (requested_role !== 'trader' && requested_role !== 'reputable' && requested_role !== 'trusted') {
-            return message.reply('You did not specify one of three options for roles: \"Trader,\" \"Reputable,\" and \"Trusted.\"');
+            message.reply('You did not specify one of three options for roles: \"Trader,\" \"Reputable,\" and \"Trusted.\"');
+            return 100;
         }
 
         const positive_rep_count = await Reputation.count({

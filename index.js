@@ -144,7 +144,11 @@ client.on('message', async message => {
     setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 
     try {
-        command.execute(message, args);
+        command.execute(message, args).then(reason => {
+            if (reason === 100) {
+                timestamps.delete(message.author.id);
+            }
+        });
     } catch (error) {
         console.error(error);
         message.reply('there was an error trying to execute that command!');
