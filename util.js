@@ -6,7 +6,8 @@ function isAllowedString(str) {
             !(code > 47 && code < 60) &&
             !(code > 64 && code < 91) &&
             !(code > 96 && code < 123) &&
-            (code !== 32) && (code !== 33)) {
+            (code !== 32) && (code !== 33) &&
+            (code !== 39)) {
             return false;
         }
     }
