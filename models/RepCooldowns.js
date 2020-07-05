@@ -4,6 +4,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.BIGINT,
             allowNull: false
         },
+        default_cooldown: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
         trader_cooldown: {
             type: DataTypes.INTEGER,
             allowNull: false
