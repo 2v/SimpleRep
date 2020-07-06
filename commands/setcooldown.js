@@ -1,4 +1,5 @@
 const { RepCooldowns } = require('../dbObjects');
+const { formatSeconds } = require('../util')
 
 module.exports = {
     name: 'setcooldown',

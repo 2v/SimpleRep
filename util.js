@@ -14,6 +14,26 @@ function isAllowedString(str) {
     return true;
 }
 
+function formatSeconds(sec) {
+    let hours = Math.floor(sec / 3600);
+    sec %= 3600;
+    let minutes = Math.floor(sec / 60);
+    let seconds = sec % 60;
+
+    let timeDisplay = [];
+
+    if (hours !== 0) {
+        timeDisplay.push(` ${hours} hour(s)`);
+    } if (minutes !== 0) {
+        timeDisplay.push(` ${minutes} minute(s)`);
+    } if (seconds !== 0) {
+        timeDisplay.push(` ${seconds} second(s)`);
+    }
+
+    return timeDisplay.toString();
+}
+
 module.exports = {
-    isAllowedString: isAllowedString
+    isAllowedString: isAllowedString,
+    formatSeconds: formatSeconds
 };
