@@ -2,7 +2,7 @@ const { RepThresholdSettings } = require('../dbObjects');
 const Discord = require('discord.js');
 
 module.exports = {
-    name: 'repinfo',
+    name: 'requirements',
     description: 'Check the role names and rep thresholds associated with each of a server.',
     guildOnly: true,
     async execute(message, args) {
