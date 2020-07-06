@@ -1,9 +1,10 @@
 const fs = require('fs');
-const { Prefix } = require('./dbObjects.js');
+const { Prefix, RepCooldowns } = require('./dbObjects.js');
 const Discord = require('discord.js');
 const Sequelize = require('sequelize');
 const { token } = require('./config.json');
 const { v4: uuidv4 } = require('uuid');
+const { formatSeconds } = require('./util')
 
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
@@ -117,14 +118,17 @@ client.on('message', async message => {
     let cooldownAmount = 3000;
 
     if (!(message.channel.type === "dm")) {
-        if (message.member.roles.cache.has(trusted_role.id) && command.trusted_cooldown > 0) {
-            cooldownAmount = command.trusted_cooldown * 1000;
-        } else if (message.member.roles.cache.has(reputable_role.id) && command.reputable_cooldown > 0) {
-            cooldownAmount = command.reputable_cooldown * 1000;
-        } else if (message.member.roles.cache.has(trader_role.id) && command.trader_cooldown > 0) {
-            cooldownAmount = command.trader_cooldown * 1000;
-        } else {
-            cooldownAmount = (command.cooldown || 3) * 1000;
+        if(command.variable_cooldown) {
+            const cooldown_setting = await RepCooldowns.findOne({ where: { guild_id: message.guild.id } }) || await RepCooldowns.findOne({ where: { guild_id: 0 } });
+            if (message.member.roles.cache.has(trusted_role.id)) {
+                cooldownAmount = cooldown_setting.trusted_cooldown * 1000;
+            } else if (message.member.roles.cache.has(reputable_role.id)) {
+                cooldownAmount = cooldown_setting.reputable_cooldown * 1000;
+            } else if (message.member.roles.cache.has(trader_role.id)) {
+                cooldownAmount = cooldown_setting.trader_cooldown * 1000;
+            } else {
+                cooldownAmount = cooldown_setting.default_cooldown * 1000;
+            }
         }
 
         if (message.member.permissions.has('ADMINISTRATOR', true)) {
@@ -137,13 +141,8 @@ client.on('message', async message => {
 
         if (now < expirationTime) {
             const timeLeft = (expirationTime - now) / 1000;
-            if (timeLeft > 3600) {
-                return message.reply(`please wait ${(timeLeft/3600).toFixed(1)} more hour(s) before using the \`${command.name}\` command.`);
-            } else if (timeLeft > 60) {
-                return message.reply(`please wait ${(timeLeft/60).toFixed(1)} more minute(s) before using the \`${command.name}\` command.`);
-            } else {
-                return message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before using the \`${command.name}\` command.`);
-            }
+            return message.reply(`please wait ${formatSeconds(timeLeft)} before using the \`${command.name}\` command.`);
+
         }
     }
 

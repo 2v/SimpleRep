@@ -3,6 +3,8 @@ const Discord = require('discord.js');
 
 module.exports = {
     name: 'requirements',
+    cooldown: 10,
+    admin_cooldown: 3,
     description: 'Check the role names and rep thresholds associated with each of a server.',
     guildOnly: true,
     async execute(message, args) {

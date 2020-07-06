@@ -4,6 +4,8 @@ const Discord = require('discord.js');
 
 module.exports = {
     name: 'cooldowns',
+    cooldown: 10,
+    admin_cooldown: 3,
     description: 'Check the role names and cooldowns associated with each of a server.',
     guildOnly: true,
     async execute(message, args) {
@@ -16,10 +18,10 @@ module.exports = {
                 .setTitle(message.guild.name + '\'s Cooldown Information:')
                 .setThumbnail(message.guild.iconURL({ format: "png", dynamic: true }))
                 .addFields(
-                    {name: 'Default Role', value: formatSeconds(cooldown_setting.default_cooldown) },
-                    { name: 'Trader Role', value: formatSeconds(cooldown_setting.trader_cooldown) },
-                    { name: 'Reputable Role', value: formatSeconds(cooldown_setting.reputable_cooldown) },
-                    { name: 'Trusted Role', value: formatSeconds(cooldown_setting.trusted_cooldown) },
+                    {name: 'Default Role', value: `Cooldown: ${formatSeconds(cooldown_setting.default_cooldown) || 'none'}` },
+                    { name: 'Trader Role', value: `Cooldown: ${formatSeconds(cooldown_setting.trader_cooldown) || 'none'}` },
+                    { name: 'Reputable Role', value: `Cooldown: ${formatSeconds(cooldown_setting.reputable_cooldown) || 'none'}` },
+                    { name: 'Trusted Role', value: `Cooldown: ${formatSeconds(cooldown_setting.trusted_cooldown) || 'none'}` },
                 )
 
             await message.channel.send(settings_embed);
@@ -33,10 +35,10 @@ module.exports = {
             .setTitle(message.guild.name + '\'s Cooldown Information:')
             .setThumbnail(message.guild.iconURL({ format: "png", dynamic: true }))
             .addFields(
-                {name: 'Default Role', value: cooldown_setting_default.default_cooldown },
-                { name: 'Trader Role', value: cooldown_setting_default.trader_cooldown },
-                { name: 'Reputable Role', value: cooldown_setting_default.reputable_cooldown },
-                { name: 'Trusted Role', value: cooldown_setting_default.trusted_cooldown },
+                {name: 'Default Role', value: `Cooldown: ${formatSeconds(cooldown_setting_default.default_cooldown) || 'none'}` },
+                { name: 'Trader Role', value: `Cooldown: ${formatSeconds(cooldown_setting_default.trader_cooldown) || 'none'}` },
+                { name: 'Reputable Role', value: `Cooldown: ${formatSeconds(cooldown_setting_default.reputable_cooldown) || 'none'}` },
+                { name: 'Trusted Role', value: `Cooldown: ${formatSeconds(cooldown_setting_default.trusted_cooldown) || 'none'}` },
             )
 
         await message.channel.send(default_settings_embed);
