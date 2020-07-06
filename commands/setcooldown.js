@@ -12,7 +12,7 @@ module.exports = {
         let requested_cooldown = args[0].toLowerCase();
 
         if (requested_cooldown !== 'default' && requested_cooldown !== 'trader' && requested_cooldown !== 'reputable' && requested_cooldown !== 'trusted') {
-            message.reply('You did not specify one of three options for roles: \"Default,\" \"Trader,\" \"Reputable,\" and \"Trusted.\"');
+            message.reply('You did not specify one of three options for roles: \`Default\`, \`Trader\`, \`Reputable\`, and \`Trusted\`.');
             return 100;
         }
 
@@ -32,19 +32,19 @@ module.exports = {
         if (setting) {
             if (requested_cooldown === 'default') {
                 await RepCooldowns.update({ default_cooldown: roleCooldown }, { where: { guild_id: message.guild.id } });
-                message.reply(`Default role updated to a cooldown of: ${roleCooldown}`);
+                message.reply(`Default role updated to a cooldown of: \`${roleCooldown}\` seconds.`);
                 return 200;
             } if (requested_cooldown === 'trader') {
                 await RepCooldowns.update({ trader_cooldown: roleCooldown }, { where: { guild_id: message.guild.id } });
-                message.reply(`Trader role updated to a cooldown of: ${roleCooldown}`);
+                message.reply(`Trader role updated to a cooldown of: \`${roleCooldown}\` seconds.`);
                 return 200;
             } else if (requested_cooldown === 'reputable') {
                 await RepCooldowns.update({ reputable_cooldown: roleCooldown }, { where: { guild_id: message.guild.id } });
-                message.reply(`Reputable role updated to a cooldown of: ${roleCooldown}`);
+                message.reply(`Reputable role updated to a cooldown of: \`${roleCooldown}\` seconds.`);
                 return 200;
             } else {
                 await RepCooldowns.update({ trusted_cooldown: roleCooldown }, { where: { guild_id: message.guild.id } });
-                message.reply(`Trusted role updated to a cooldown of: ${roleCooldown}`);
+                message.reply(`Trusted role updated to a cooldown of: \`${roleCooldown}\` seconds.`);
                 return 200;
             }
         }
@@ -69,7 +69,7 @@ module.exports = {
                 reputable_cooldown: default_reputable_cooldown,
                 trusted_cooldown: default_trusted_cooldown,
             })
-            message.reply(`Default role updated to a cooldown of: ${roleCooldown}`);
+            message.reply(`Default role updated to a cooldown of: \`${roleCooldown}\` seconds.`);
             return 200;
         } if (requested_cooldown === 'trader') {
             await RepCooldowns.create({
@@ -79,7 +79,7 @@ module.exports = {
                 reputable_cooldown: default_reputable_cooldown,
                 trusted_cooldown: default_trusted_cooldown,
             })
-            message.reply(`Trader role updated to a cooldown of: ${roleCooldown}`);
+            message.reply(`Trader role updated to a cooldown of: \`${roleCooldown}\` seconds.`);
             return 200;
         } else if (requested_cooldown === 'reputable') {
             await RepCooldowns.create({
@@ -89,7 +89,7 @@ module.exports = {
                 reputable_cooldown: roleCooldown,
                 trusted_cooldown: default_trusted_cooldown,
             })
-            message.reply(`Reputable role updated to a cooldown of: ${roleCooldown}`);
+            message.reply(`Reputable role updated to a cooldown of: \`${roleCooldown}\` seconds.`);
             return 200;
         } else {
             await RepCooldowns.create({
@@ -99,7 +99,7 @@ module.exports = {
                 reputable_cooldown: default_reputable_cooldown,
                 trusted_cooldown: roleCooldown,
             })
-            message.reply(`Trusted role updated to a cooldown of: ${roleCooldown}`);
+            message.reply(`Trusted role updated to a cooldown of: \`${roleCooldown}\` seconds.`);
             return 200;
         }
     },
