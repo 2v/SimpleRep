@@ -9,7 +9,7 @@ module.exports = {
     description: 'Check the role names and cooldowns associated with each of a server.',
     guildOnly: true,
     async execute(message, args) {
-        const cooldown_setting = await RepCooldowns.findOne({ where: { guild_id: message.guild.id } });
+        const cooldown_setting = await RepCooldowns.findOne({ where: { guild_id: message.guild.id } }) || await RepCooldowns.findOne({ where: { guild_id: 0 } });
 
         if (cooldown_setting) {
 
@@ -27,21 +27,5 @@ module.exports = {
             await message.channel.send(settings_embed);
             return 200;
         }
-
-        const cooldown_setting_default = await RepCooldowns.findOne({ where: { guild_id: 0 } });
-
-        const default_settings_embed = new Discord.MessageEmbed()
-            .setColor('#0099ff')
-            .setTitle(message.guild.name + '\'s Cooldown Information:')
-            .setThumbnail(message.guild.iconURL({ format: "png", dynamic: true }))
-            .addFields(
-                {name: 'Default Role', value: `Cooldown: ${formatSeconds(cooldown_setting_default.default_cooldown) || 'none'}` },
-                { name: 'Trader Role', value: `Cooldown: ${formatSeconds(cooldown_setting_default.trader_cooldown) || 'none'}` },
-                { name: 'Reputable Role', value: `Cooldown: ${formatSeconds(cooldown_setting_default.reputable_cooldown) || 'none'}` },
-                { name: 'Trusted Role', value: `Cooldown: ${formatSeconds(cooldown_setting_default.trusted_cooldown) || 'none'}` },
-            )
-
-        await message.channel.send(default_settings_embed);
-        return 200;
     }
 }
