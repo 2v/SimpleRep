@@ -118,6 +118,9 @@ client.on('message', async message => {
     let cooldownAmount = 3000;
 
     if (!(message.channel.type === "dm")) {
+        cooldownAmount = (command.cooldown || 3) * 1000;
+
+
         if(command.variable_cooldown) {
             const cooldown_setting = await RepCooldowns.findOne({ where: { guild_id: message.guild.id } }) || await RepCooldowns.findOne({ where: { guild_id: 0 } });
             if (message.member.roles.cache.has(trusted_role.id)) {
