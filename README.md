@@ -31,7 +31,7 @@ You will need the following to utilize all of SimpleRep's features (items marked
 If you want to change any core features, this bot can be easily modified. Commands have been organized as simply as possible and can be modified in the source easily, although this will require self-hosting. The bot is not modular, but it allows the tuning of parameters for most commands.
 
 ### Steps for building:
-<sub>Please do note that you will not receive any help whatsoever while trying to build your own Mantaro.</sub>
+<sub>Please do note that you will not receive any help whatsoever while trying to build your own SimpleRep.</sub>
 1. Make sure you have the prerequisites installed and running.
 2. Run `npm install`
 3. Run `node dbInit.js` with the optional `--force` flag to generate the databases.
